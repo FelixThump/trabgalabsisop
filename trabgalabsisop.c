@@ -1,26 +1,18 @@
-/*
- ============================================================================
- Name        : trabga.c
- Author      : Felipe
- Version     :
- Copyright   : Your copyright notice
- Description :
- ============================================================================
- */
-
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
 
+void imprimemenu(void);
+void sig_handler(int signo);
+
 int main() {
 	int opcao;
 	do {
-		printf("<<<< Applications Menu >>>\n");
-		printf("    1) Web Browser\n");
-		printf("    2) Text Editor\n");
-		printf("    3) Terminal\n");
-		printf("    4) Finalizar processo\n");
-		printf("    5) Quit\n");
+
+			if (signal(SIGINT, sig_handler) == SIG_ERR)
+		printf("\nNão consegui pegar o SIGINT\n");
+
+		imprimemenu();
 		printf("Opção: \n");
 		scanf("%d", &opcao);
 
@@ -57,7 +49,7 @@ int main() {
 			scanf("%d", &proc);
 
 			if (proc == 1)
-				kill(firefox + 1, SIGTERM);
+				kill(firefox, SIGTERM);
 			if (proc == 2)
 				kill(gedit, SIGTERM);
 			if (proc == 3)
@@ -70,4 +62,18 @@ int main() {
 			break;
 		}
 	} while (opcao != 5);
+}
+
+void imprimemenu(void){
+		printf("<<<< Applications Menu >>>\n");
+		printf("    1) Web Browser\n");
+		printf("    2) Text Editor\n");
+		printf("    3) Terminal\n");
+		printf("    4) Finalizar processo\n");
+		printf("    5) Quit\n");
+}
+
+void sig_handler(int signo) {
+	if (signo == SIGINT)
+		imprimemenu();
 }
